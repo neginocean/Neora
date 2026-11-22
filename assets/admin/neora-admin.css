@@ -1,0 +1,564 @@
+/* Neora Core — Unified Modern Admin Design System (RTL & LTR native) */
+
+:root {
+	--neora-bg: #f6f7fb;
+	--neora-surface: #ffffff;
+	--neora-surface-muted: #f9fafb;
+	--neora-border: #e2e8f0;
+	--neora-text: #0f172a;
+	--neora-text-muted: #475569;
+	--neora-primary: #469de5;
+	--neora-primary-hover: #3872ca;
+	--neora-primary-soft: #eef2ff;
+	--neora-primary-border: #c7d2fe;
+	--neora-primary-contrast: #ffffff;
+	--neora-success: #15803d;
+	--neora-success-bg: #dcfce7;
+	--neora-warning: #b45309;
+	--neora-warning-bg: #fef3c7;
+	--neora-danger: #b91c1c;
+	--neora-danger-bg: #fee2e2;
+	--neora-neutral: #475569;
+	--neora-neutral-bg: #f1f5f9;
+	--neora-radius: 12px;
+	--neora-radius-sm: 8px;
+	--neora-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.neora-admin-wrap {
+	max-width: 1120px;
+	margin: 20px 20px 40px 0;
+	color: var(--neora-text);
+	box-sizing: border-box;
+}
+
+.rtl .neora-admin-wrap {
+	margin: 20px 0 40px 20px;
+}
+
+.neora-admin-wrap *,
+.neora-admin-wrap *::before,
+.neora-admin-wrap *::after {
+	box-sizing: border-box;
+}
+
+/* Header */
+.neora-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 20px 24px;
+	background: var(--neora-surface);
+	border: 1px solid var(--neora-border);
+	border-radius: var(--neora-radius);
+	box-shadow: var(--neora-shadow);
+	margin-bottom: 20px;
+}
+
+.neora-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.neora-header__logo {
+	width: 44px;
+	height: 44px;
+	border-radius: 10px;
+	background: linear-gradient(135deg, var(--neora-primary) 0%, var(--neora-primary-hover) 100%);
+	color: var(--neora-primary-contrast);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 18px;
+	flex-shrink: 0;
+	overflow: hidden;
+}
+
+.neora-header__logo--image {
+	background: var(--neora-surface-muted);
+	border: 1px solid var(--neora-border);
+	padding: 4px;
+}
+
+.neora-header__logo-img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
+}
+
+.neora-header__title {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--neora-text);
+}
+
+.neora-header__subtitle {
+	margin: 4px 0 0;
+	font-size: 13px;
+	color: var(--neora-text-muted);
+}
+
+.neora-header__meta {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+/* Badges */
+.neora-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.neora-badge--primary {
+	background: var(--neora-primary-soft);
+	color: var(--neora-primary);
+}
+
+.neora-badge--success {
+	background: var(--neora-success-bg);
+	color: var(--neora-success);
+}
+
+.neora-badge--warning {
+	background: var(--neora-warning-bg);
+	color: var(--neora-warning);
+}
+
+.neora-badge--danger {
+	background: var(--neora-danger-bg);
+	color: var(--neora-danger);
+}
+
+.neora-badge--neutral {
+	background: var(--neora-neutral-bg);
+	color: var(--neora-neutral);
+}
+
+/* Navigation Tabs */
+.neora-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	padding: 6px;
+	background: var(--neora-surface);
+	border: 1px solid var(--neora-border);
+	border-radius: var(--neora-radius);
+	margin-bottom: 20px;
+	box-shadow: var(--neora-shadow);
+}
+
+.neora-tab {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 9px 16px;
+	border-radius: var(--neora-radius-sm);
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--neora-text-muted);
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.neora-tab:hover {
+	background: var(--neora-surface-muted);
+	color: var(--neora-text);
+}
+
+.neora-tab.is-active {
+	background: var(--neora-primary);
+	color: var(--neora-primary-contrast);
+}
+
+/* Cards & Grid */
+.neora-card {
+	background: var(--neora-surface);
+	border: 1px solid var(--neora-border);
+	border-radius: var(--neora-radius);
+	box-shadow: var(--neora-shadow);
+	padding: 22px 24px;
+	margin-bottom: 20px;
+}
+
+.neora-card__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding-bottom: 14px;
+	margin-bottom: 18px;
+	border-bottom: 1px solid var(--neora-border);
+}
+
+.neora-card__title {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--neora-text);
+}
+
+.neora-card__desc {
+	margin: 4px 0 0;
+	font-size: 13px;
+	color: var(--neora-text-muted);
+}
+
+.neora-modules-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.neora-module-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 14px;
+	padding: 18px;
+	background: var(--neora-surface-muted);
+	border: 1px solid var(--neora-border);
+	border-radius: var(--neora-radius-sm);
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.neora-module-card.is-active {
+	background: var(--neora-surface);
+	border-color: var(--neora-primary-border);
+}
+
+.neora-module-card__top {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.neora-module-card__name {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--neora-text);
+}
+
+.neora-module-card__key {
+	display: inline-block;
+	margin-top: 4px;
+	font-size: 11px;
+	color: var(--neora-text-muted);
+	background: var(--neora-neutral-bg);
+	padding: 2px 6px;
+	border-radius: 4px;
+	direction: ltr;
+}
+
+.neora-module-card__desc {
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.55;
+	color: var(--neora-text-muted);
+}
+
+.neora-module-card__dep {
+	margin: 8px 0 0;
+	padding: 8px 10px;
+	border-radius: 6px;
+	background: var(--neora-danger-bg);
+	color: var(--neora-danger);
+	font-size: 12px;
+}
+
+.neora-module-card__footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	padding-top: 10px;
+	border-top: 1px solid var(--neora-border);
+}
+
+/* Toggle Switch */
+.neora-switch {
+	position: relative;
+	display: inline-block;
+	width: 44px;
+	height: 24px;
+	flex-shrink: 0;
+}
+
+.neora-switch input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+	position: absolute;
+}
+
+.neora-switch__slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background-color: #cbd5e1;
+	border-radius: 999px;
+	transition: background-color 0.2s ease;
+}
+
+.neora-switch__slider::before {
+	content: "";
+	position: absolute;
+	height: 18px;
+	width: 18px;
+	inset-inline-start: 3px;
+	bottom: 3px;
+	background-color: #ffffff;
+	border-radius: 50%;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s ease;
+}
+
+.neora-switch input:checked + .neora-switch__slider {
+	background-color: var(--neora-primary);
+}
+
+.neora-switch input:checked + .neora-switch__slider::before {
+	transform: translateX(20px);
+}
+
+.rtl .neora-switch input:checked + .neora-switch__slider::before {
+	transform: translateX(-20px);
+}
+
+.neora-switch input:disabled + .neora-switch__slider {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.neora-switch input:focus-visible + .neora-switch__slider {
+	outline: 2px solid var(--neora-primary);
+	outline-offset: 2px;
+}
+
+/* System Stats Grid */
+.neora-stats-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 12px;
+}
+
+.neora-stat {
+	padding: 14px 16px;
+	background: var(--neora-surface-muted);
+	border: 1px solid var(--neora-border);
+	border-radius: var(--neora-radius-sm);
+}
+
+.neora-stat__label {
+	font-size: 12px;
+	color: var(--neora-text-muted);
+	margin-bottom: 6px;
+}
+
+.neora-stat__value {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--neora-text);
+	direction: ltr;
+	display: inline-block;
+}
+
+/* Settings Forms & Test SMS */
+.neora-admin-wrap .form-table th {
+	padding: 16px 10px 16px 0;
+	font-weight: 600;
+	color: var(--neora-text);
+}
+
+.neora-admin-wrap .regular-text {
+	border-radius: 6px;
+	border: 1px solid #cbd5e1;
+	padding: 6px 10px;
+}
+
+.neora-admin-wrap .regular-text:focus {
+	border-color: var(--neora-primary);
+	box-shadow: 0 0 0 1px var(--neora-primary);
+}
+
+.neora-test-sms-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+}
+
+.neora-inline-feedback {
+	margin-top: 12px;
+	padding: 10px 14px;
+	border-radius: var(--neora-radius-sm);
+	font-size: 13px;
+	display: none;
+}
+
+.neora-inline-feedback.is-visible {
+	display: block;
+}
+
+.neora-inline-feedback.is-success {
+	background: var(--neora-success-bg);
+	color: var(--neora-success);
+}
+
+.neora-inline-feedback.is-error {
+	background: var(--neora-danger-bg);
+	color: var(--neora-danger);
+}
+
+/* Buttons */
+.neora-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 9px 18px;
+	border-radius: var(--neora-radius-sm);
+	font-size: 13px;
+	font-weight: 600;
+	border: 1px solid transparent;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.neora-btn--primary {
+	background: var(--neora-primary);
+	color: var(--neora-primary-contrast);
+}
+
+.neora-btn--primary:hover {
+	background: var(--neora-primary-hover);
+	color: var(--neora-primary-contrast);
+}
+
+.neora-btn--secondary {
+	background: var(--neora-surface);
+	border-color: var(--neora-border);
+	color: var(--neora-text);
+}
+
+.neora-btn--secondary:hover {
+	background: var(--neora-surface-muted);
+	color: var(--neora-text);
+}
+
+.neora-btn:disabled {
+	opacity: 0.6;
+	cursor: wait;
+}
+
+/* Unified Meta Boxes (Services & Portfolio) */
+.neora-metabox-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 16px;
+	padding: 6px 0;
+}
+
+.neora-metabox-field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.neora-metabox-field--full {
+	grid-column: 1 / -1;
+}
+
+.neora-metabox-field label {
+	font-weight: 600;
+	font-size: 13px;
+	color: var(--neora-text);
+}
+
+.neora-metabox-field input[type="text"],
+.neora-metabox-field textarea {
+	width: 100%;
+	padding: 7px 10px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+}
+
+.neora-metabox-field .description {
+	margin: 0;
+	font-size: 12px;
+	color: var(--neora-text-muted);
+}
+
+/* White-Label Controls */
+.neora-logo-field {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.neora-logo-field__preview {
+	display: none;
+	width: 64px;
+	height: 64px;
+	padding: 6px;
+	border: 1px solid var(--neora-border);
+	border-radius: var(--neora-radius-sm);
+	background: var(--neora-surface-muted);
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.neora-logo-field__preview.has-logo {
+	display: inline-flex;
+}
+
+.neora-logo-field__preview img {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	display: block;
+}
+
+.neora-logo-field__controls,
+.neora-color-field {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+}
+
+.neora-color-field__picker {
+	width: 42px;
+	height: 36px;
+	padding: 2px;
+	border: 1px solid var(--neora-border);
+	border-radius: 6px;
+	background: var(--neora-surface);
+	cursor: pointer;
+}
+
+.neora-color-field__hex {
+	width: 96px !important;
+	font-family: monospace;
+	text-transform: lowercase;
+}
