@@ -1,0 +1,143 @@
+<%- include('partials/head', { docTitle: pageTitle, inlineCss }) %>
+<%
+  const headerBadges = [];
+  if (showVersionBadge) {
+    headerBadges.push({ label: 'v' + coreVersion, variant: 'primary' });
+  }
+  headerBadges.push({ label: activeCount + ' / ' + totalCount + ' Active', variant: 'success' });
+
+  const headerArgs = {
+    title: pageTitle,
+    subtitle: dashboardSubtitle,
+    logoUrl: brandLogoUrl,
+    monogram: brandMonogram,
+    brandAlt: pageTitle,
+    badges: headerBadges,
+    action: {
+      label: 'Settings',
+      url: '/settings'
+    }
+  };
+%>
+<div class="wrap neora-admin-wrap">
+  <%- include('partials/header', { headerArgs }) %>
+
+  <% if (modulesSaved) { %>
+    <div class="notice notice-success is-dismissible">
+      <p>Module settings saved.</p>
+    </div>
+  <% } %>
+
+  <% if (hasInternalDepBlock) { %>
+    <div class="notice notice-warning">
+      <p>One or more enabled modules could not be activated because an internal module dependency is missing or disabled.</p>
+    </div>
+  <% } %>
+
+  <div class="neora-card">
+    <div class="neora-card__header">
+      <div>
+        <h2 class="neora-card__title">Modules</h2>
+        <p class="neora-card__desc">
+          Enable or disable optional platform features for this website.
+        </p>
+      </div>
+    </div>
+
+    <form method="post" action="/admin-post/neora_save_modules">
+      <div class="neora-modules-grid">
+        <% Object.entries(modules).forEach(function([key, mod]) { %>
+          <%
+            const isCore = mod.isCore;
+            const missingDeps = dependencyErrors[key] || [];
+            const requires = declaredDependencies[key] || [];
+            const requiredBy = dependentModules[key] || [];
+            const isEffective = Boolean(effectiveStates[key]);
+            const isBooted = activeKeys.has(key);
+          %>
+          <div class="neora-module-card <%= isBooted ? 'is-active' : '' %>">
+            <div>
+              <div class="neora-module-card__top">
+                <div>
+                  <h3 class="neora-module-card__name"><%= mod.name %></h3>
+                  <code class="neora-module-card__key"><%= key %></code>
+                </div>
+                <label class="neora-switch" aria-label="<%= mod.name %>">
+                  <input
+                    type="checkbox"
+                    name="neora_modules[<%= key %>]"
+                    value="1"
+                    <%= isEffective ? 'checked' : '' %>
+                    <%= isCore ? 'disabled' : '' %>
+                  />
+                  <span class="neora-switch__slider"></span>
+                </label>
+              </div>
+              <% if (mod.description) { %>
+                <p class="neora-module-card__desc" style="margin-top: 10px;">
+                  <%= mod.description %>
+                </p>
+              <% } %>
+              <% if (requires.length > 0) { %>
+                <p class="neora-module-card__desc" style="margin-top: 8px; font-size: 12px;">
+                  Requires: <%= requires.join(', ') %>
+                </p>
+              <% } %>
+              <% if (requiredBy.length > 0) { %>
+                <p class="neora-module-card__desc" style="margin-top: 4px; font-size: 12px;">
+                  Required by: <%= requiredBy.join(', ') %>
+                </p>
+              <% } %>
+              <% if (missingDeps.length > 0) { %>
+                <p class="neora-module-card__dep">
+                  <%= missingDeps.join(' | ') %>
+                </p>
+              <% } %>
+            </div>
+
+            <div class="neora-module-card__footer">
+              <% if (isCore) { %>
+                <span class="neora-badge neora-badge--primary">Core (Required)</span>
+              <% } else if (missingDeps.length > 0) { %>
+                <span class="neora-badge neora-badge--danger">Missing Dependency</span>
+              <% } else if (isBooted) { %>
+                <span class="neora-badge neora-badge--success">Active</span>
+              <% } else { %>
+                <span class="neora-badge neora-badge--neutral">Inactive</span>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+
+      <button type="submit" class="neora-btn neora-btn--primary">
+        Save Module Settings
+      </button>
+    </form>
+  </div>
+
+  <% if (showSystemInfo) { %>
+    <div class="neora-card">
+      <div class="neora-card__header">
+        <div>
+          <h2 class="neora-card__title">System</h2>
+        </div>
+      </div>
+      <div class="neora-stats-grid">
+        <div class="neora-stat">
+          <div class="neora-stat__label">Plugin version</div>
+          <code class="neora-stat__value"><%= coreVersion %></code>
+        </div>
+        <div class="neora-stat">
+          <div class="neora-stat__label">Node.js runtime</div>
+          <code class="neora-stat__value"><%= nodeVersion %></code>
+        </div>
+        <div class="neora-stat">
+          <div class="neora-stat__label">Menu label</div>
+          <code class="neora-stat__value"><%= menuLabel %></code>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+<%- include('partials/footer', { adminFooterText }) %>

@@ -1,0 +1,466 @@
+<%- include('partials/head', { docTitle: brandName + ' — Settings', inlineCss }) %>
+<%
+  const headerArgs = {
+    title: brandName + ' — Settings',
+    subtitle: settingsSubtitle,
+    logoUrl: brandLogoUrl,
+    monogram: brandMonogram,
+    brandAlt: brandName,
+    badges: [],
+    action: {
+      label: 'Modules Dashboard',
+      url: '/'
+    }
+  };
+%>
+<div class="wrap neora-admin-wrap">
+  <%- include('partials/header', { headerArgs }) %>
+
+  <% if (settingsUpdated) { %>
+    <div class="notice notice-success is-dismissible">
+      <p>Settings saved.</p>
+    </div>
+  <% } %>
+
+  <nav class="neora-tabs" aria-label="Settings Tabs">
+    <% Object.entries(tabs).forEach(function([tabKey, tab]) { %>
+      <a
+        href="/settings?tab=<%= encodeURIComponent(tabKey) %>"
+        class="neora-tab <%= activeTab === tabKey ? 'is-active' : '' %>"
+      >
+        <%= tab.title %>
+      </a>
+    <% }); %>
+  </nav>
+
+  <% if (activeTab === 'general') { %>
+    <div class="neora-card">
+      <form method="post" action="/settings/save" novalidate="novalidate">
+        <input type="hidden" name="tab" value="general" />
+        <h2>Platform Branding (White-Label)</h2>
+        <p>Customize branding labels when deploying Neora Core on client websites.</p>
+        <table class="form-table" role="presentation">
+          <tbody>
+            <tr>
+              <th scope="row"><label for="neora_general_brand_name">Platform Brand Name</label></th>
+              <td>
+                <input type="text" id="neora_general_brand_name" name="neora_core_general_settings[brand_name]" value="<%= generalSettings.brand_name %>" placeholder="Neora Core" class="regular-text" />
+                <p class="description">Displayed as the main dashboard title for this client site.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_menu_label">Admin Menu Label</label></th>
+              <td>
+                <input type="text" id="neora_general_menu_label" name="neora_core_general_settings[menu_label]" value="<%= generalSettings.menu_label %>" placeholder="Neora Core" class="regular-text" />
+                <p class="description">Customizes the top-level WordPress admin menu item label.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_menu_icon">Admin Menu Icon</label></th>
+              <td>
+                <select id="neora_general_menu_icon" name="neora_core_general_settings[menu_icon]">
+                  <% Object.entries(menuIcons).forEach(function([val, label]) { %>
+                    <option value="<%= val %>" <%= generalSettings.menu_icon === val ? 'selected' : '' %>><%= label %></option>
+                  <% }); %>
+                </select>
+                <p class="description">Selects the Dashicon shown next to the top-level admin menu item.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_logo_url">Brand Logo</label></th>
+              <td>
+                <div class="neora-logo-field">
+                  <div class="neora-logo-field__preview <%= generalSettings.logo_url ? 'has-logo' : '' %>" id="neora-logo-preview">
+                    <% if (generalSettings.logo_url) { %>
+                      <img src="<%= generalSettings.logo_url %>" alt="Brand Logo Preview" />
+                    <% } %>
+                  </div>
+                  <div class="neora-logo-field__controls">
+                    <input type="url" id="neora_general_logo_url" name="neora_core_general_settings[logo_url]" value="<%= generalSettings.logo_url %>" placeholder="https://example.com/logo.png" class="regular-text" dir="ltr" />
+                    <button type="button" id="neora-remove-logo-btn" class="neora-btn neora-btn--secondary" <%= generalSettings.logo_url ? '' : 'hidden' %>>Remove</button>
+                  </div>
+                </div>
+                <p class="description">Optional square logo URL displayed in Neora admin headers. Leave empty to use the brand monogram.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_brand_color">Brand Accent Color</label></th>
+              <td>
+                <div class="neora-color-field">
+                  <input type="color" id="neora_general_brand_color_picker" value="<%= generalSettings.brand_color %>" class="neora-color-field__picker" aria-label="Brand Color Picker" />
+                  <input type="text" id="neora_general_brand_color" name="neora_core_general_settings[brand_color]" value="<%= generalSettings.brand_color %>" class="small-text neora-color-field__hex" maxlength="7" dir="ltr" />
+                  <button type="button" id="neora-reset-brand-color" class="neora-btn neora-btn--secondary">Reset Default</button>
+                </div>
+                <p class="description">Primary accent color applied to Neora admin buttons, active tabs, switches, and badges.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_dashboard_subtitle">Dashboard Subtitle</label></th>
+              <td>
+                <input type="text" id="neora_general_dashboard_subtitle" name="neora_core_general_settings[dashboard_subtitle]" value="<%= generalSettings.dashboard_subtitle %>" placeholder="Modular WordPress platform foundation & module manager." class="regular-text" />
+                <p class="description">Displayed beneath the main heading on the Modules Dashboard.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_settings_subtitle">Settings Header Subtitle</label></th>
+              <td>
+                <input type="text" id="neora_general_settings_subtitle" name="neora_core_general_settings[settings_subtitle]" value="<%= generalSettings.settings_subtitle %>" placeholder="Manage branding, SMS gateway, and active module configurations." class="regular-text" />
+                <p class="description">Displayed beneath the main heading on the Settings page.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_general_admin_footer_text">Admin Footer Text</label></th>
+              <td>
+                <input type="text" id="neora_general_admin_footer_text" name="neora_core_general_settings[admin_footer_text]" value="<%= generalSettings.admin_footer_text %>" placeholder="Powered by Neora Studio" class="regular-text" />
+                <p class="description">Optional custom footer text displayed on Neora Core admin pages.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Version Badge</th>
+              <td>
+                <label for="neora_general_show_version_badge">
+                  <input type="checkbox" id="neora_general_show_version_badge" name="neora_core_general_settings[show_version_badge]" value="1" <%= generalSettings.show_version_badge ? 'checked' : '' %> />
+                  Display the plugin version badge in the dashboard header
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">System Info Card</th>
+              <td>
+                <label for="neora_general_show_system_info">
+                  <input type="checkbox" id="neora_general_show_system_info" name="neora_core_general_settings[show_system_info]" value="1" <%= generalSettings.show_system_info ? 'checked' : '' %> />
+                  Display the System version summary card on the dashboard
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="submit">
+          <button type="submit" class="neora-btn neora-btn--primary">Save Settings</button>
+        </p>
+      </form>
+    </div>
+
+  <% } else if (activeTab === 'regional') { %>
+    <div class="neora-card">
+      <form method="post" action="/settings/save" novalidate="novalidate">
+        <input type="hidden" name="tab" value="regional" />
+        <h2>Currency & Regional Preferences</h2>
+        <p>Configure active currency, regional numeral formatting, and localization defaults.</p>
+        <p class="description">Active effective currency: <strong><%= activeCurrencyCode %></strong> (Sample: <strong><%= sampleFormattedAmount %></strong>)</p>
+        <table class="form-table" role="presentation">
+          <tbody>
+            <tr>
+              <th scope="row"><label for="neora_regional_default_currency">Default Currency</label></th>
+              <td>
+                <select id="neora_regional_default_currency" name="neora_core_regional_settings[default_currency]">
+                  <% Object.entries(currencies).forEach(function([code, info]) { %>
+                    <option value="<%= code %>" <%= regionalSettings.default_currency === code ? 'selected' : '' %>>
+                      <%= code %> — <%= info.name %> (<%= info.symbol %>)
+                    </option>
+                  <% }); %>
+                </select>
+                <p class="description">Primary currency used for Services pricing and Neora formatting helpers.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_regional_default_country">Default Country / Region</label></th>
+              <td>
+                <select id="neora_regional_default_country" name="neora_core_regional_settings[default_country]">
+                  <% Object.entries(supportedCountries).forEach(function([iso, label]) { %>
+                    <option value="<%= iso %>" <%= regionalSettings.default_country === iso ? 'selected' : '' %>><%= label %></option>
+                  <% }); %>
+                </select>
+                <p class="description">Default ISO region used for regional formatting and phone number normalization.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_regional_numeral_style">Numeral Style</label></th>
+              <td>
+                <select id="neora_regional_numeral_style" name="neora_core_regional_settings[numeral_style]">
+                  <option value="auto" <%= regionalSettings.numeral_style === 'auto' ? 'selected' : '' %>>Automatic (Match site language / Polylang)</option>
+                  <option value="persian" <%= regionalSettings.numeral_style === 'persian' ? 'selected' : '' %>>Persian digits (۰-۹)</option>
+                  <option value="latin" <%= regionalSettings.numeral_style === 'latin' ? 'selected' : '' %>>Latin digits (0-9)</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_regional_thousand_separator">Thousand Separator</label></th>
+              <td>
+                <select id="neora_regional_thousand_separator" name="neora_core_regional_settings[thousand_separator]">
+                  <option value="comma" <%= regionalSettings.thousand_separator === 'comma' ? 'selected' : '' %>>Comma (,)</option>
+                  <option value="persian_comma" <%= regionalSettings.thousand_separator === 'persian_comma' ? 'selected' : '' %>>Persian separator (٬)</option>
+                  <option value="space" <%= regionalSettings.thousand_separator === 'space' ? 'selected' : '' %>>Space ( )</option>
+                  <option value="dot" <%= regionalSettings.thousand_separator === 'dot' ? 'selected' : '' %>>Dot (.)</option>
+                  <option value="none" <%= regionalSettings.thousand_separator === 'none' ? 'selected' : '' %>>None</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_regional_decimal_separator">Decimal Separator</label></th>
+              <td>
+                <select id="neora_regional_decimal_separator" name="neora_core_regional_settings[decimal_separator]">
+                  <option value="dot" <%= regionalSettings.decimal_separator === 'dot' ? 'selected' : '' %>>Dot (.)</option>
+                  <option value="slash" <%= regionalSettings.decimal_separator === 'slash' ? 'selected' : '' %>>Slash (/)</option>
+                  <option value="persian_decimal" <%= regionalSettings.decimal_separator === 'persian_decimal' ? 'selected' : '' %>>Persian decimal (٫)</option>
+                  <option value="comma" <%= regionalSettings.decimal_separator === 'comma' ? 'selected' : '' %>>Comma (,)</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_regional_symbol_position">Currency Symbol Position</label></th>
+              <td>
+                <select id="neora_regional_symbol_position" name="neora_core_regional_settings[symbol_position]">
+                  <option value="default" <%= regionalSettings.symbol_position === 'default' ? 'selected' : '' %>>Currency default</option>
+                  <option value="before" <%= regionalSettings.symbol_position === 'before' ? 'selected' : '' %>>Left ($100)</option>
+                  <option value="before_space" <%= regionalSettings.symbol_position === 'before_space' ? 'selected' : '' %>>Left with space ($ 100)</option>
+                  <option value="after" <%= regionalSettings.symbol_position === 'after' ? 'selected' : '' %>>Right (100$)</option>
+                  <option value="after_space" <%= regionalSettings.symbol_position === 'after_space' ? 'selected' : '' %>>Right with space (100 tomans)</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">WooCommerce Currency Sync</th>
+              <td>
+                <label for="neora_regional_sync_woocommerce_currency">
+                  <input type="checkbox" id="neora_regional_sync_woocommerce_currency" name="neora_core_regional_settings[sync_woocommerce_currency]" value="1" <%= regionalSettings.sync_woocommerce_currency ? 'checked' : '' %> />
+                  Automatically follow WooCommerce active store currency when WooCommerce is active
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="submit">
+          <button type="submit" class="neora-btn neora-btn--primary">Save Settings</button>
+        </p>
+      </form>
+    </div>
+
+  <% } else if (activeTab === 'sms') { %>
+    <div class="neora-card">
+      <form method="post" action="/settings/save" novalidate="novalidate">
+        <input type="hidden" name="tab" value="sms" />
+        <h2>SMS Routing & Primary Gateway (Melipayamak)</h2>
+        <p>Configure your primary SMS provider, international fallback routing, and Melipayamak credentials. When Sandbox Mode is enabled, SMS messages are logged instead of sending over the network.</p>
+        <table class="form-table" role="presentation">
+          <tbody>
+            <tr>
+              <th scope="row">Sandbox Mode (Local Test)</th>
+              <td>
+                <label for="neora_sms_sandbox_mode">
+                  <input type="checkbox" id="neora_sms_sandbox_mode" name="neora_sms_settings[sandbox_mode]" value="1" <%= smsSettings.sandbox_mode ? 'checked' : '' %> />
+                  Enable Sandbox Mode (log OTP codes instead of calling external SMS API)
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_default_provider">Primary SMS Provider</label></th>
+              <td>
+                <select id="neora_sms_default_provider" name="neora_sms_settings[default_provider]">
+                  <% Object.entries(providerOptions).forEach(function([val, label]) { %>
+                    <option value="<%= val %>" <%= smsSettings.default_provider === val ? 'selected' : '' %>><%= label %></option>
+                  <% }); %>
+                </select>
+                <p class="description">Primary gateway used for domestic and default SMS delivery.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_international_provider">International Fallback Provider</label></th>
+              <td>
+                <select id="neora_sms_international_provider" name="neora_sms_settings[international_provider]">
+                  <option value="" <%= smsSettings.international_provider === '' ? 'selected' : '' %>>Disabled (Primary provider only)</option>
+                  <% Object.entries(intlProviderOptions).forEach(function([val, label]) { %>
+                    <option value="<%= val %>" <%= smsSettings.international_provider === val ? 'selected' : '' %>><%= label %></option>
+                  <% }); %>
+                </select>
+                <p class="description">Automatically used for non-Iranian E.164 numbers when the primary provider only supports Iran.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Async Queue & Retries</th>
+              <td>
+                <label for="neora_sms_async_queue_enabled">
+                  <input type="checkbox" id="neora_sms_async_queue_enabled" name="neora_sms_settings[async_queue_enabled]" value="1" <%= smsSettings.async_queue_enabled ? 'checked' : '' %> />
+                  Enable background queue and exponential-backoff retries for transactional SMS
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_username">Melipayamak Username</label></th>
+              <td>
+                <input type="text" id="neora_sms_username" name="neora_sms_settings[username]" value="<%= smsSettings.username %>" placeholder="0912xxxxxxx" class="regular-text" dir="ltr" />
+                <p class="description">Your Melipayamak panel username.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_password">Melipayamak Password / API Key</label></th>
+              <td>
+                <% if (envSecrets.password) { %>
+                  <input type="password" id="neora_sms_password" value="" placeholder="••••••••••••••••" class="regular-text" disabled dir="ltr" />
+                  <p class="description">Managed via NEORA_SMS_PASSWORD environment variable.</p>
+                <% } else { %>
+                  <input type="password" id="neora_sms_password" name="neora_sms_settings[password]" value="" placeholder="<%= smsSettings.password ? '••••••••••••••••' : '' %>" class="regular-text" autocomplete="new-password" dir="ltr" />
+                  <p class="description">Leave blank to keep the existing password unchanged.</p>
+                <% } %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_sender_number">Sender Number</label></th>
+              <td>
+                <input type="text" id="neora_sms_sender_number" name="neora_sms_settings[sender_number]" value="<%= smsSettings.sender_number %>" placeholder="5000xxx" class="regular-text" dir="ltr" />
+                <p class="description">Dedicated SMS line number used for standard (non-pattern) SMS.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_pattern_code">OTP Pattern Code (BodyId)</label></th>
+              <td>
+                <input type="text" id="neora_sms_pattern_code" name="neora_sms_settings[pattern_code]" value="<%= smsSettings.pattern_code %>" placeholder="123456" class="regular-text" dir="ltr" />
+                <p class="description">Service pattern code (BodyId) approved in Melipayamak for fast OTP delivery.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>International SMS Providers (Twilio & Webhook)</h2>
+        <p>Configure international SMS gateways for E.164 numbers outside Iran.</p>
+        <table class="form-table" role="presentation">
+          <tbody>
+            <tr>
+              <th scope="row"><label for="neora_sms_twilio_account_sid">Twilio Account SID</label></th>
+              <td>
+                <input type="text" id="neora_sms_twilio_account_sid" name="neora_sms_settings[twilio_account_sid]" value="<%= smsSettings.twilio_account_sid %>" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" class="regular-text" dir="ltr" />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_twilio_auth_token">Twilio Auth Token</label></th>
+              <td>
+                <% if (envSecrets.twilio_auth_token) { %>
+                  <input type="password" id="neora_sms_twilio_auth_token" value="" placeholder="••••••••••••••••" class="regular-text" disabled dir="ltr" />
+                  <p class="description">Managed via NEORA_TWILIO_AUTH_TOKEN environment variable.</p>
+                <% } else { %>
+                  <input type="password" id="neora_sms_twilio_auth_token" name="neora_sms_settings[twilio_auth_token]" value="" placeholder="<%= smsSettings.twilio_auth_token ? '••••••••••••••••' : '' %>" class="regular-text" autocomplete="new-password" dir="ltr" />
+                  <p class="description">Leave blank to keep the existing token unchanged.</p>
+                <% } %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_twilio_from">Twilio From Number / Messaging Service SID</label></th>
+              <td>
+                <input type="text" id="neora_sms_twilio_from" name="neora_sms_settings[twilio_from]" value="<%= smsSettings.twilio_from %>" placeholder="+15005550006" class="regular-text" dir="ltr" />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_twilio_otp_template">Twilio OTP Message Template</label></th>
+              <td>
+                <input type="text" id="neora_sms_twilio_otp_template" name="neora_sms_settings[twilio_otp_template]" value="<%= smsSettings.twilio_otp_template %>" placeholder="Your verification code is: {code}" class="regular-text" dir="ltr" />
+                <p class="description">Use {code} as placeholder for the OTP code.</p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_webhook_url">Webhook Endpoint URL</label></th>
+              <td>
+                <input type="url" id="neora_sms_webhook_url" name="neora_sms_settings[webhook_url]" value="<%= smsSettings.webhook_url %>" placeholder="https://sms-gateway.example.com/send" class="regular-text" dir="ltr" />
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_webhook_secret">Webhook Bearer Token</label></th>
+              <td>
+                <% if (envSecrets.webhook_secret) { %>
+                  <input type="password" id="neora_sms_webhook_secret" value="" placeholder="••••••••••••••••" class="regular-text" disabled dir="ltr" />
+                  <p class="description">Managed via NEORA_WEBHOOK_SECRET environment variable.</p>
+                <% } else { %>
+                  <input type="password" id="neora_sms_webhook_secret" name="neora_sms_settings[webhook_secret]" value="" placeholder="<%= smsSettings.webhook_secret ? '••••••••••••••••' : '' %>" class="regular-text" autocomplete="new-password" dir="ltr" />
+                  <p class="description">Optional Bearer token sent in the Authorization header.</p>
+                <% } %>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><label for="neora_sms_webhook_otp_template">Webhook OTP Fallback Template</label></th>
+              <td>
+                <input type="text" id="neora_sms_webhook_otp_template" name="neora_sms_settings[webhook_otp_template]" value="<%= smsSettings.webhook_otp_template %>" placeholder="Your verification code is: {code}" class="regular-text" dir="ltr" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="submit">
+          <button type="submit" class="neora-btn neora-btn--primary">Save Settings</button>
+        </p>
+      </form>
+    </div>
+
+    <div class="neora-card">
+      <div class="neora-card__header">
+        <div>
+          <h2 class="neora-card__title">Test SMS Delivery</h2>
+          <p class="neora-card__desc">
+            Send a sample OTP pattern (12345) to verify your routing, E.164 formatting, or Sandbox log.
+          </p>
+        </div>
+      </div>
+      <div class="neora-test-sms-row">
+        <select id="neora-test-sms-country" aria-label="Country Code">
+          <% Object.entries(callingCodes).forEach(function([iso, dial]) { %>
+            <option value="<%= iso %>" <%= defaultCountry === iso ? 'selected' : '' %>><%= iso %> (+<%= dial %>)</option>
+          <% }); %>
+        </select>
+        <input
+          type="text"
+          id="neora-test-sms-phone"
+          class="regular-text"
+          dir="ltr"
+          placeholder="09123456789 / +447911123456"
+          aria-label="Test Mobile Number"
+        />
+        <button type="button" id="neora-send-test-sms" class="neora-btn neora-btn--secondary">
+          Send Test SMS
+        </button>
+      </div>
+      <div id="neora-test-sms-feedback" class="neora-inline-feedback" role="status" aria-live="polite"></div>
+    </div>
+
+    <div id="neora-sms-queue-card" class="neora-card" data-nonce="neora_sms_queue_action">
+      <div class="neora-card__header">
+        <div>
+          <h2 class="neora-card__title">SMS Queue & Retries</h2>
+          <p class="neora-card__desc">
+            Monitor queued transactional SMS jobs and manually trigger due deliveries.
+          </p>
+        </div>
+      </div>
+      <p class="description">
+        Pending: <strong id="neora-queue-pending"><%= queueStats.pending %></strong>
+        &nbsp;|&nbsp;
+        Completed: <strong id="neora-queue-completed"><%= queueStats.completed %></strong>
+        &nbsp;|&nbsp;
+        Failed: <strong id="neora-queue-failed"><%= queueStats.failed %></strong>
+      </p>
+      <div class="neora-test-sms-row" style="margin-top: 12px;">
+        <button type="button" class="neora-btn neora-btn--secondary" data-queue-action="process_due">
+          Process Due Jobs
+        </button>
+        <button type="button" class="neora-btn neora-btn--secondary" data-queue-action="clear_completed">
+          Clear Finished Jobs
+        </button>
+      </div>
+      <div id="neora-sms-queue-feedback" class="neora-inline-feedback" role="status" aria-live="polite"></div>
+    </div>
+  <% } %>
+</div>
+
+<script>
+  window.neoraAdminData = {
+    ajaxUrl: '/admin-ajax',
+    testSmsNonce: 'neora_test_sms',
+    defaultColor: '<%= defaultColor %>',
+    i18n: {
+      enterMobile: 'Please enter a valid mobile number first.',
+      sending: 'Sending...',
+      genericError: 'An unexpected error occurred while sending the test SMS.',
+      selectLogoTitle: 'Select Brand Logo',
+      useThisLogo: 'Use this logo'
+    }
+  };
+</script>
+<script src="/assets/admin/neora-admin.js"></script>
+<%- include('partials/footer', { adminFooterText }) %>

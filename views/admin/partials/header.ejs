@@ -1,0 +1,37 @@
+<div class="neora-header">
+  <div class="neora-header__brand">
+    <% if (headerArgs.logoUrl) { %>
+      <span class="neora-header__logo neora-header__logo--image">
+        <img
+          src="<%= headerArgs.logoUrl %>"
+          alt="<%= headerArgs.brandAlt %>"
+          class="neora-header__logo-img"
+        />
+      </span>
+    <% } else { %>
+      <span class="neora-header__logo" aria-hidden="true"><%= headerArgs.monogram %></span>
+    <% } %>
+    <div>
+      <h1 class="neora-header__title"><%= headerArgs.title %></h1>
+      <% if (headerArgs.subtitle) { %>
+        <p class="neora-header__subtitle"><%= headerArgs.subtitle %></p>
+      <% } %>
+    </div>
+  </div>
+  <% if ((headerArgs.badges && headerArgs.badges.length > 0) || headerArgs.action) { %>
+    <div class="neora-header__meta">
+      <% (headerArgs.badges || []).forEach(function(badge) { %>
+        <% if (badge.label) { %>
+          <span class="neora-badge neora-badge--<%= badge.variant || 'primary' %>">
+            <%= badge.label %>
+          </span>
+        <% } %>
+      <% }); %>
+      <% if (headerArgs.action && headerArgs.action.url && headerArgs.action.label) { %>
+        <a class="neora-btn neora-btn--secondary" href="<%= headerArgs.action.url %>">
+          <%= headerArgs.action.label %>
+        </a>
+      <% } %>
+    </div>
+  <% } %>
+</div>
